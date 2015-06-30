@@ -1,0 +1,10 @@
+{
+  "name": "slot-machine",
+  "description": "Slot Machine Application",
+  "version": "0.0.1",
+  "dependencies": {
+    "browser-sync": "^2.7.13",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.1.0"
+  }
+}
