@@ -1,0 +1,29 @@
+.container {
+  width: 50%;
+  height: 300px;
+  margin: 0 auto;
+  border: 1px solid black;
+}
+
+.spindle {
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  width: 76%;
+  height: 117px;
+  border: 1px solid green;
+}
+
+img {
+  max-width: 100%;
+}
+
+.reel {
+  width: 30.33%;
+  float: left;
+  margin-right: 14px;
+}
+
+.reel:last-child {
+  margin-right: 0;
+}
