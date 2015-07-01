@@ -9,19 +9,22 @@
   position: relative;
   overflow: hidden;
   margin: 0 auto;
-  width: 76%;
-  height: 117px;
+  width: 388px;
+  height: 137px;
   border: 1px solid green;
+  padding: 0 12px;
 }
 
 img {
   max-width: 100%;
+  padding: 10px 0;
 }
 
 .reel {
   width: 30.33%;
   float: left;
   margin-right: 14px;
+  position: relative;
 }
 
 .reel:last-child {
