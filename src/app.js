@@ -2,21 +2,28 @@
 
   function Reel(element) {
     this.element = element;
+    this.moving = false;
   }
 
   Reel.prototype.spin = function spin(then) {
+    this.moving = true;
     // On each call,and recursive call, to spin declare a new time variable and check if 3 seconds have
     // elapsed since the lever was pulled. If it has then call the stop method on the reels.
     var now = new Date().getTime();
-    if (now > then + 3000) this.stop();
-
+    if (now > then + 3000) {
+      this.moving = false;
+    }
     var that = this.element;
     that.style.bottom = (that.style.bottom.split('px').shift() - 100) + 'px';
-    if (that.style.bottom.split('px').shift() > 0) {
-      window.requestAnimationFrame(this.spin.bind(this, then));
+    if (this.moving !== false) {
+      if (that.style.bottom.split('px').shift() > 0) {
+        window.requestAnimationFrame(this.spin.bind(this, then));
+      } else {
+        that.style.bottom = reelStart;
+        window.requestAnimationFrame(this.spin.bind(this, then));
+      }
     } else {
-      that.style.bottom = reelStart;
-      window.requestAnimationFrame(this.spin.bind(this, then));
+      return this.stop();
     }
   }
 
