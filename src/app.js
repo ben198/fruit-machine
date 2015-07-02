@@ -3,6 +3,7 @@
   function Reel(element) {
     this.element = element;
     this.moving = false;
+    this.imageShowing = null;
   }
 
   Reel.prototype.spin = function spin(then) {
@@ -31,6 +32,17 @@
     console.log('STOP!');
   }
 
+  Reel.prototype.getImageOnScreen = function() {
+    var reelImages = this.element.childNodes;
+    for (let i = 0; i < reelImages.length; i++) {
+      if (reelImages[i].nodeType !== 3) {
+        var place = reelImages[i].getBoundingClientRect();
+        if (place.top > slotScreen.top && place.bottom < slotScreen.bottom) this.imageShowing = reelImages[i];
+      } 
+    }
+  }
+
+  var slotScreen = document.getElementById('screen').getBoundingClientRect();
   // Select all reels as a node list
   var reelNodes = document.querySelectorAll('.reel');
   // Create a new object for each reel, with a reference to the node in the 'element' property
