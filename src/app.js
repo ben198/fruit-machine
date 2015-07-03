@@ -8,20 +8,22 @@
 
   Reel.prototype.spin = function spin(then) {
     this.moving = true;
+    this.getImageOnScreen.bind(this)();
     // On each call,and recursive call, to spin declare a new time variable and check if 3 seconds have
     // elapsed since the lever was pulled. If it has then call the stop method on the reels.
     var now = new Date().getTime();
-    if (now > then + 3000) {
+    // Once 3 seconds have gone, and there is an image fully displayed on the screen, change the 'moving' property to false
+    if (now > then + 3000 && this.imageShowing) {
       this.moving = false;
     }
     var that = this.element;
-    that.style.bottom = (that.style.bottom.split('px').shift() - 100) + 'px';
+    that.style.bottom = (that.style.bottom.split('px').shift() - 1) + 'px';
     if (this.moving !== false) {
       if (that.style.bottom.split('px').shift() > 0) {
-        window.requestAnimationFrame(this.spin.bind(this, then));
+        setTimeout(this.spin.bind(this, then), 1);
       } else {
         that.style.bottom = reelStart;
-        window.requestAnimationFrame(this.spin.bind(this, then));
+        setTimeout(this.spin.bind(this, then), 1);
       }
     } else {
       return this.stop();
@@ -37,7 +39,12 @@
     for (let i = 0; i < reelImages.length; i++) {
       if (reelImages[i].nodeType !== 3) {
         var place = reelImages[i].getBoundingClientRect();
-        if (place.top > slotScreen.top && place.bottom < slotScreen.bottom) this.imageShowing = reelImages[i];
+        if (place.top > slotScreen.top && place.bottom < slotScreen.bottom) {
+          this.imageShowing = reelImages[i];
+          return false;
+        } else {
+          this.imageShowing = null;
+        }
       } 
     }
   }
