@@ -61,7 +61,7 @@
   var reel2 = new Reel(reelNodes[1]);
   var reel3 = new Reel(reelNodes[2]);
   var reelObjects = [reel1, reel2, reel3];
-  var reelStart = 1410 + 'px';
+  var reelStart = 1356 + 'px';
   // Set initial position of reels
   for (let i = 0; i < reelNodes.length; i++) {
     reelNodes[i].style.bottom = reelStart;
