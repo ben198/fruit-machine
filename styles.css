@@ -1,17 +1,26 @@
+body {
+  background-color: #FF9E1B;
+}
+
+h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 3em;
+  text-align: center;
+}
+
 .container {
   width: 50%;
   height: 300px;
-  margin: 0 auto;
-  border: 1px solid black;
+  margin: 104px auto 0;
 }
 
 .spindle {
   position: relative;
   overflow: hidden;
   margin: 0 auto;
-  width: 388px;
-  height: 137px;
-  border: 1px solid green;
+  width: 464px;
+  height: 152px;
   padding: 0 12px;
 }
 
@@ -21,9 +30,9 @@ img {
 }
 
 .reel {
-  width: 30.33%;
+  width: 27.33%;
   float: left;
-  margin-right: 14px;
+  margin-right: 38px;
   position: relative;
 }
 
