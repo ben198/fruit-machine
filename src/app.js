@@ -6,24 +6,28 @@
     this.imageShowing = null;
   }
 
-  Reel.prototype.spin = function spin(then) {
+  Reel.prototype.spin = function spin(eachSpinDistance) {
     this.moving = true;
-    this.getImageOnScreen.bind(this)();
-    // On each call,and recursive call, to spin declare a new time variable and check if 3 seconds have
-    // elapsed since the lever was pulled. If it has then call the stop method on the reels.
-    var now = new Date().getTime();
-    // Once 3 seconds have gone, and there is an image fully displayed on the screen, change the 'moving' property to false
-    if (now > then + 3000 && this.imageShowing) {
+    // Once the distance of each spin has slowed down to 1px, and there is an image fully displayed on the screen,
+    // change the 'moving' property to false.
+    if (this.imageShowing) {
       this.moving = false;
     }
     var that = this.element;
-    that.style.bottom = (that.style.bottom.split('px').shift() - 1) + 'px';
+
+    // Every time the spin method is called on a reel, the distance in pixels that the reel moves will be reduced until it reaches 1px.
+    // When this happens the program will start querying the icon showing on the slot-machine screen, and when one is showing, the stop
+    // method will be called.
+    if (eachSpinDistance > 1.0) eachSpinDistance = eachSpinDistance - 0.1;
+    else this.getImageOnScreen.bind(this)();
+
+    that.style.bottom = (that.style.bottom.split('px').shift() - eachSpinDistance) + 'px';
     if (this.moving !== false) {
       if (that.style.bottom.split('px').shift() > 0) {
-        setTimeout(this.spin.bind(this, then), 1);
+        setTimeout(this.spin.bind(this, eachSpinDistance), 1);
       } else {
         that.style.bottom = reelStart;
-        setTimeout(this.spin.bind(this, then), 1);
+        setTimeout(this.spin.bind(this, eachSpinDistance), 1);
       }
     } else {
       return this.stop();
@@ -63,15 +67,14 @@
     reelNodes[i].style.bottom = reelStart;
   }
 
-  // On pull of the lever capture the time that the click/pull event happened. Then call the spin
-  // method on each of the reel objects, passing the click/pull time as an argument
+  // On pull of the lever call the spin method on each of the reel objects, passing a random number between 20 and 100 as an argument. This 
+  // random number will be the number of pixels that the reel moves on the initial spin. The number will get smaller on each subsequent spin.
   var lever = document.getElementById('lever');
   lever.addEventListener('click', function() {
-    var time = new Date().getTime();
     var leverSound = new Audio('../src/sounds/lever.mp3').play();
     setTimeout(function() {
       reelObjects.forEach(function(obj, i) {
-        return obj.spin(time);
+        return obj.spin(Math.floor(Math.random() * (100 - 20 + 1)) + 20);
       });
     }, 1000);
   });
