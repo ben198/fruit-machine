@@ -1,9 +1,10 @@
 (function() {
 
-  function Reel(element) {
+  function Reel(element, id) {
     this.element = element;
     this.moving = false;
     this.imageShowing = null;
+    this.sound = new Audio('../src/sounds/slot-' + id + '.mp3');
   }
 
   Reel.prototype.spin = function spin(eachSpinDistance) {
@@ -35,6 +36,7 @@
   }
 
   Reel.prototype.stop = function stop() {
+    this.sound.play();
     console.log('STOP!');
   }
 
@@ -69,9 +71,9 @@
   // Select all reels as a node list
   var reelNodes = document.querySelectorAll('.reel');
   // Create a new object for each reel, with a reference to the node in the 'element' property
-  var reel1 = new Reel(reelNodes[0]);
-  var reel2 = new Reel(reelNodes[1]);
-  var reel3 = new Reel(reelNodes[2]);
+  var reel1 = new Reel(reelNodes[0], 1);
+  var reel2 = new Reel(reelNodes[1], 2);
+  var reel3 = new Reel(reelNodes[2], 3);
   var reelObjects = [reel1, reel2, reel3];
   var reelStart = 1356 + 'px';
   // Set initial position of reels
@@ -83,9 +85,9 @@
   // random number will be the number of pixels that the reel moves on the initial spin. The number will get smaller on each subsequent spin.
   var lever = document.getElementById('lever');
   lever.addEventListener('click', function() {
-    var leverSound = new Audio('../src/sounds/lever.mp3').play();
+    new Audio('../src/sounds/lever.mp3').play();
     setTimeout(function() {
-      reelObjects.forEach(function(obj, i) {
+      reelObjects.forEach(function(obj) {
         return obj.spin(Math.floor(Math.random() * (100 - 20 + 1)) + 20);
       });
     }, 1000);
