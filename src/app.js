@@ -53,6 +53,18 @@
     }
   }
 
+  function didPlayerWin() {
+    var eachImgSrc = [];
+    for (let i = 0; i < reelObjects.length; i++) {
+      eachImgSrc.push(reelObjects[i].imageShowing.src);
+    }
+    // If the src attribute is the same for all images showing on the screen return it (string is truthy),
+    // or if they aren't return false.
+    return eachImgSrc.reduce(function(pre, cur) {
+      return pre === cur ? cur : false;
+    });
+  }
+
   var slotScreen = document.getElementById('screen').getBoundingClientRect();
   // Select all reels as a node list
   var reelNodes = document.querySelectorAll('.reel');
