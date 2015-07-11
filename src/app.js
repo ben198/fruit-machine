@@ -37,7 +37,14 @@
 
   Reel.prototype.stop = function stop() {
     this.sound.play();
-    console.log('STOP!');
+    stopped++;
+    didPlayerWin(function(answer) {
+      reelObjects.forEach(function(reel) {
+        // Reset the imageShowing property for each reel so that additional spins are possible
+        return reel.imageShowing = null;
+      });
+      //
+    });
   }
 
   Reel.prototype.getImageOnScreen = function() {
@@ -55,16 +62,22 @@
     }
   }
 
-  function didPlayerWin() {
-    var eachImgSrc = [];
-    for (let i = 0; i < reelObjects.length; i++) {
-      eachImgSrc.push(reelObjects[i].imageShowing.src);
+  function didPlayerWin(callback) {
+    // Only get the answer if all reels have stopped turning
+    if (stopped === 3) {
+      // Reset the stopped variable for future spins
+      stopped = 0;
+      var eachImgSrc = [];
+      for (let i = 0; i < reelObjects.length; i++) {
+        eachImgSrc.push(reelObjects[i].imageShowing.src);
+      }
+      // If the src attribute is the same for all images showing on the screen return it (string is truthy),
+      // or if they aren't return false.
+      var answer = eachImgSrc.reduce(function(pre, cur) {
+        return pre === cur ? cur : false;
+      });
+      callback(answer);
     }
-    // If the src attribute is the same for all images showing on the screen return it (string is truthy),
-    // or if they aren't return false.
-    return eachImgSrc.reduce(function(pre, cur) {
-      return pre === cur ? cur : false;
-    });
   }
 
   var slotScreen = document.getElementById('screen').getBoundingClientRect();
@@ -74,6 +87,7 @@
   var reel1 = new Reel(reelNodes[0], 1);
   var reel2 = new Reel(reelNodes[1], 2);
   var reel3 = new Reel(reelNodes[2], 3);
+  var stopped = 0;
   var reelObjects = [reel1, reel2, reel3];
   var reelStart = 1356 + 'px';
   // Set initial position of reels
