@@ -19,7 +19,7 @@
     // Every time the spin method is called on a reel, the distance in pixels that the reel moves will be reduced until it reaches 1px.
     // When this happens the program will start querying the icon showing on the slot-machine screen, and when one is showing, the stop
     // method will be called.
-    if (eachSpinDistance > 1.0) eachSpinDistance = eachSpinDistance - 0.1;
+    if (eachSpinDistance > 2.0) eachSpinDistance = eachSpinDistance - 0.1;
     else this.getImageOnScreen.bind(this)();
 
     that.style.bottom = (that.style.bottom.split('px').shift() - eachSpinDistance) + 'px';
@@ -52,7 +52,7 @@
     for (let i = 0; i < reelImages.length; i++) {
       if (reelImages[i].nodeType !== 3) {
         var place = reelImages[i].getBoundingClientRect();
-        if (place.top > slotScreen.top && place.bottom < slotScreen.bottom) {
+        if (place.top > slotScreen.top + 20 && place.bottom < slotScreen.bottom) {
           this.imageShowing = reelImages[i];
           return false;
         } else {
