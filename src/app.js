@@ -39,15 +39,24 @@
     didPlayerWin(function(answer) {
       if (answer) {
         jackpotSound.play();
+        var interval = setInterval(function() {
+          winMessage.style.visibility = (winMessage.style.visibility === 'hidden') ? 'visible' : 'hidden';
+        }, 300);
+        setTimeout(function() {
+          clearInterval(interval);
+          winMessage.style.visibility = 'visible';
+          button.disabled = false;
+          button.style.backgroundColor = '#E8341B';
+        }, 5000);
       } else {
         finishSound.play();
+        button.disabled = false;
+        button.style.backgroundColor = '#E8341B';
       }
       reelObjects.forEach(function(reel) {
         // Reset the imageShowing property for each reel so that additional spins are possible
         return reel.imageShowing = null;
       });
-      button.disabled = false;
-      button.style.backgroundColor = '#E8341B';
     });
   }
 
@@ -97,6 +106,8 @@
   var reel3 = new Reel(reelNodes[2], 3);
   var stopped = 0;
   var reelObjects = [reel1, reel2, reel3];
+  var winMessage = document.getElementById('winMessage');
+  winMessage.style.visibility = 'hidden';
   // Sounds
   var machineSounds = [
     new Audio('../src/sounds/machine-01.mp3'), 
@@ -118,6 +129,7 @@
   // random number will be the number of pixels that the reel moves on the initial spin. The number will get smaller on each subsequent spin.
   var button = document.getElementById('button');
   button.addEventListener('click', function() {
+    if (winMessage.style.visibility === 'visible') winMessage.style.visibility = 'hidden';
     buttonSound.play();
     machineSounds[randomNumberBetween(0, 3)].play();
     this.disabled = true;
