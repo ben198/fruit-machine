@@ -10,9 +10,21 @@ h1 {
 }
 
 .container {
+  position: relative;
   width: 50%;
   height: 300px;
   margin: 104px auto 0;
+}
+
+.container:before {
+  position: absolute;
+  content: "";
+  left: 0;
+/*  top: -9px;*/
+  border: 1px solid black;
+  width: 477px;
+  height: 153px;
+  border-radius: 12px;
 }
 
 .spindle {
@@ -22,6 +34,7 @@ h1 {
   width: 464px;
   height: 152px;
   padding: 0 12px;
+  /*bottom: 5px;*/
 }
 
 img {
