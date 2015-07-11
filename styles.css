@@ -2,18 +2,31 @@ body {
   background-color: #FF9E1B;
 }
 
-h1 {
+h1, h2 {
   font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
   font-weight: 300;
   font-size: 3em;
   text-align: center;
+}
+
+h2 {
+  width: 394px;
+  margin: 0 auto;
+  padding-top: 20px;
+  color: #E8341B;
+  font-weight: 800;
+  text-align: center;
+  visibility: hidden;
 }
 
 .container {
   position: relative;
   width: 484px;
   height: 300px;
-  margin: 104px auto 0;
+  margin: 70px auto 0;
 }
 
 button {
