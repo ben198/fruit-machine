@@ -4,7 +4,6 @@
     this.element = element;
     this.moving = false;
     this.imageShowing = null;
-    this.sound = new Audio('../src/sounds/slot-' + id + '.mp3');
   }
 
   Reel.prototype.spin = function spin(eachSpinDistance) {
@@ -36,14 +35,19 @@
   }
 
   Reel.prototype.stop = function stop() {
-    this.sound.play();
     stopped++;
     didPlayerWin(function(answer) {
+      if (answer) {
+        jackpotSound.play();
+      } else {
+        finishSound.play();
+      }
       reelObjects.forEach(function(reel) {
         // Reset the imageShowing property for each reel so that additional spins are possible
         return reel.imageShowing = null;
       });
-      //
+      button.disabled = false;
+      button.style.backgroundColor = '#E8341B';
     });
   }
 
@@ -80,6 +84,10 @@
     }
   }
 
+  function randomNumberBetween(lowest, highest) {
+    return Math.floor(Math.random() * (highest - lowest + 1)) + lowest;
+  }
+
   var slotScreen = document.getElementById('screen').getBoundingClientRect();
   // Select all reels as a node list
   var reelNodes = document.querySelectorAll('.reel');
@@ -89,22 +97,36 @@
   var reel3 = new Reel(reelNodes[2], 3);
   var stopped = 0;
   var reelObjects = [reel1, reel2, reel3];
-  var reelStart = 1356 + 'px';
+  // Sounds
+  var machineSounds = [
+    new Audio('../src/sounds/machine-01.mp3'), 
+    new Audio('../src/sounds/machine-02.mp3'), 
+    new Audio('../src/sounds/machine-03.mp3'), 
+    new Audio('../src/sounds/machine-04.mp3')
+  ];
+  var finishSound = new Audio('../src/sounds/finish.mp3');
+  var jackpotSound = new Audio('../src/sounds/jackpot.mp3');
+  var buttonSound = new Audio('../src/sounds/button.mp3');
+
+  var reelStart = 1927 + 'px';
   // Set initial position of reels
   for (let i = 0; i < reelNodes.length; i++) {
     reelNodes[i].style.bottom = reelStart;
   }
 
-  // On pull of the lever call the spin method on each of the reel objects, passing a random number between 20 and 100 as an argument. This 
+  // On press of the button calls the spin method on each of the reel objects, passing a random number between 20 and 100 as an argument. This 
   // random number will be the number of pixels that the reel moves on the initial spin. The number will get smaller on each subsequent spin.
-  var lever = document.getElementById('lever');
-  lever.addEventListener('click', function() {
-    new Audio('../src/sounds/lever.mp3').play();
+  var button = document.getElementById('button');
+  button.addEventListener('click', function() {
+    buttonSound.play();
+    machineSounds[randomNumberBetween(0, 3)].play();
+    this.disabled = true;
+    this.style.backgroundColor = '#898682';
     setTimeout(function() {
       reelObjects.forEach(function(obj) {
-        return obj.spin(Math.floor(Math.random() * (100 - 20 + 1)) + 20);
+        return obj.spin(randomNumberBetween(20, 100));
       });
-    }, 1000);
+    }, 500);
   });
 
 })();
