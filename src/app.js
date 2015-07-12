@@ -8,11 +8,6 @@
 
   Reel.prototype.spin = function spin(eachSpinDistance) {
     this.moving = true;
-    // Once the distance of each spin has slowed down to 1px, and there is an image fully displayed on the screen,
-    // change the 'moving' property to false.
-    if (this.imageShowing) {
-      this.moving = false;
-    }
     var that = this.element;
 
     // Every time the spin method is called on a reel, the distance in pixels that the reel moves will be reduced until it reaches 1px.
@@ -21,8 +16,14 @@
     if (eachSpinDistance > 2.0) eachSpinDistance = eachSpinDistance - 0.1;
     else this.getImageOnScreen.bind(this)();
 
-    that.style.bottom = (that.style.bottom.split('px').shift() - eachSpinDistance) + 'px';
+    // Once the distance of each spin has slowed down to 1px, and there is an image fully displayed on the screen,
+    // change the 'moving' property to false.
+    if (this.imageShowing) {
+      this.moving = false;
+    }
+
     if (this.moving !== false) {
+      that.style.bottom = (that.style.bottom.split('px').shift() - eachSpinDistance) + 'px';
       if (that.style.bottom.split('px').shift() > 0) {
         setTimeout(this.spin.bind(this, eachSpinDistance), 1);
       } else {
@@ -65,11 +66,11 @@
     for (let i = 0; i < reelImages.length; i++) {
       if (reelImages[i].nodeType !== 3) {
         var place = reelImages[i].getBoundingClientRect();
-        if (place.top > slotScreen.top + 20 && place.bottom < slotScreen.bottom) {
+        if (place.top > slotScreen.top + 10 && place.bottom < slotScreen.bottom) {
           this.imageShowing = reelImages[i];
           return false;
         } else {
-          this.imageShowing = null;
+          if (this.imageShowing !== null) this.imageShowing = null;
         }
       } 
     }
@@ -131,10 +132,10 @@
   button.addEventListener('click', function() {
     if (winMessage.style.visibility === 'visible') winMessage.style.visibility = 'hidden';
     buttonSound.play();
-    machineSounds[randomNumberBetween(0, 3)].play();
     this.disabled = true;
     this.style.backgroundColor = '#898682';
     setTimeout(function() {
+      machineSounds[randomNumberBetween(0, 3)].play();
       reelObjects.forEach(function(obj) {
         return obj.spin(randomNumberBetween(20, 100));
       });
